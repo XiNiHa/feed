@@ -47,7 +47,16 @@ export class EffectfulBucket {
       this.get(key),
       Effect.flatMap((object) =>
         Effect.tryCatchPromise(
-          () => object.json(),
+          () => object.text(),
+          (e) => {
+            console.error(e)
+            return new R2InternalError()
+          },
+        ),
+      ),
+      Effect.flatMap((text) =>
+        Effect.tryCatch(
+          () => JSON.parse(text) as unknown,
           () => new ObjectNotJsonError(key),
         ),
       ),
