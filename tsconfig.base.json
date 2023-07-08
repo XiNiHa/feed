@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "importsNotUsedAsValues": "error",
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "incremental": true,
+    "skipLibCheck": true
+  }
+}

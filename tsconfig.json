@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "Node16",
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": [".eslintrc.cjs"]
+}
