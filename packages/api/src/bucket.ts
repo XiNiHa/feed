@@ -69,9 +69,13 @@ export class EffectfulBucket {
     )
   }
 
-  put(key: string, value: Parameters<R2Bucket['put']>[1]) {
+  put(
+    key: string,
+    value: Parameters<R2Bucket['put']>[1],
+    options?: Parameters<R2Bucket['put']>[2],
+  ) {
     return Effect.tryCatchPromise(
-      () => this.bucket.put(key, value),
+      () => this.bucket.put(key, value, options),
       (e) => {
         console.error(e)
         return new R2InternalError()
@@ -89,7 +93,11 @@ export class EffectfulBucket {
     )
   }
 
-  list(options: R2ListOptions) {
+  list(
+    options: R2ListOptions & {
+      include?: ('httpMetadata' | 'customMetadata')[]
+    },
+  ) {
     return Effect.tryCatchPromise(
       () => this.bucket.list(options),
       (e) => {
