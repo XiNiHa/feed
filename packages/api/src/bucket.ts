@@ -88,4 +88,14 @@ export class EffectfulBucket {
       },
     )
   }
+
+  list(options: R2ListOptions) {
+    return Effect.tryCatchPromise(
+      () => this.bucket.list(options),
+      (e) => {
+        console.error(e)
+        return new R2InternalError()
+      },
+    )
+  }
 }
