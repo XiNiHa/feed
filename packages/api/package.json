@@ -7,5 +7,19 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230628.0",
     "wrangler": "^3.1.2"
+  },
+  "dependencies": {
+    "@effect/data": "^0.12.9",
+    "@effect/io": "^0.27.1",
+    "@pothos/core": "^3.30.0",
+    "@pothos/plugin-errors": "^3.11.1",
+    "@pothos/plugin-relay": "^3.43.0",
+    "@pothos/plugin-simple-objects": "^3.7.0",
+    "@pothos/plugin-validation": "^3.9.2",
+    "@pothos/plugin-with-input": "^3.10.1",
+    "graphql": "^16.7.1",
+    "graphql-yoga": "^4.0.3",
+    "pothos-plugin-effect": "^0.3.0",
+    "zod": "^3.21.4"
   }
 }
