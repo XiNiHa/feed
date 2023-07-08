@@ -3,18 +3,24 @@ import * as Option from '@effect/data/Option'
 import * as Effect from '@effect/io/Effect'
 
 export class R2InternalError extends Error {
+  readonly _tag = 'R2InternalError'
+
   constructor() {
     super('R2 internal error')
   }
 }
 
 export class ObjectNotFoundError extends Error {
+  readonly _tag = 'ObjectNotFoundError'
+
   constructor(key: string) {
     super(`R2 object with key "${key}" not found from the bucket`)
   }
 }
 
 export class ObjectNotJsonError extends Error {
+  readonly _tag = 'ObjectNotJsonError'
+
   constructor(key: string) {
     super(`R2 object with key "${key}" is not JSON`)
   }
