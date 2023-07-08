@@ -18,8 +18,14 @@ module.exports = {
     project: ['./tsconfig.json', './packages/*/tsconfig.json'],
   },
   settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
     'import/resolver': {
-      typescript: true,
+      typescript: {
+        alwaysTryTypes: true,
+        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+      },
       node: true,
     },
   },
