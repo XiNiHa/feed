@@ -6,7 +6,11 @@ import ValidationPlugin from '@pothos/plugin-validation'
 import WithInputPlugin from '@pothos/plugin-with-input'
 import PothosEffectPlugin from 'pothos-plugin-effect'
 
-export type PothosContext = ExecutionContext
+import type { EffectfulBucket } from '@/bucket'
+
+export interface PothosContext extends ExecutionContext {
+  FEED_BUCKET: EffectfulBucket
+}
 
 export const builder = new SchemaBuilder<{
   Context: PothosContext

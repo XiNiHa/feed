@@ -1,3 +1,8 @@
 name = "feed-api"
 compatibility_date = "2023-06-28"
 main = "./src/index.ts"
+
+[[r2_buckets]]
+binding = "FEED_BUCKET"
+bucket_name = "feed"
+preview_bucket_name = "feed-preview"
