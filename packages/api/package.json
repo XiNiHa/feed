@@ -9,6 +9,7 @@
     "wrangler": "^3.1.2"
   },
   "dependencies": {
+    "@atproto/api": "^0.4.0",
     "@effect/data": "^0.12.9",
     "@effect/io": "^0.27.1",
     "@pothos/core": "^3.30.0",
