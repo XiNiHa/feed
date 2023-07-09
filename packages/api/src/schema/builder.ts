@@ -7,16 +7,16 @@ import WithInputPlugin from '@pothos/plugin-with-input'
 import PothosEffectPlugin from 'pothos-plugin-effect'
 
 import type { EffectfulBucket } from '@/bucket'
+import type { Env } from '@/index'
 
 export interface PothosContext extends ExecutionContext {
+  env: Env
   FEED_BUCKET: EffectfulBucket
 }
 
 export const builder = new SchemaBuilder<{
   Context: PothosContext
-  DefaultFieldNullability: true
 }>({
-  defaultFieldNullability: true,
   plugins: [
     RelayPlugin,
     ErrorsPlugin,
@@ -38,3 +38,4 @@ export const builder = new SchemaBuilder<{
 })
 
 builder.queryType({})
+builder.mutationType({})
