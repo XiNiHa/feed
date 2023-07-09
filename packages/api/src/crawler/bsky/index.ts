@@ -5,7 +5,7 @@ import * as Effect from '@effect/io/Effect'
 
 import { CrawlConfigContext, CrawlItem } from '@/crawler'
 
-interface BskyCrawlContext {
+export interface BskyCrawlContext {
   agent: BskyAgent
   account: {
     identifier: string
@@ -31,60 +31,64 @@ interface BskyCrawlItem extends CrawlItem {
   data: AppBskyFeedGetTimeline.OutputSchema['feed'][0]
 }
 
-export const crawlBsky = pipe(
-  Effect.gen(function* (_) {
-    const { agent, account, maxCount } = yield* _(BskyCrawlContext)
-    const { endTimestamp } = yield* _(CrawlConfigContext)
-    yield* _(
-      Effect.tryCatchPromise(
-        () =>
-          agent.login({
-            identifier: account.identifier,
-            password: account.password,
-          }),
-        (e) =>
-          new BskyCrawlError('failed to login', e instanceof Error ? e : null),
-      ),
-      Effect.tap(({ data }) =>
-        Effect.logInfo(
-          `Successfully logged in, account handle: ${data.handle}`,
-        ),
-      ),
-    )
-
-    let cursor: string | undefined = undefined
-    let count = 0
-    let lastTimestamp: number = Date.now()
-
-    const parts = yield* _(
-      Effect.loop(
-        { count, lastTimestamp },
-        ({ count, lastTimestamp }) => {
-          return count < maxCount && lastTimestamp > endTimestamp
-        },
-        () => ({ count, lastTimestamp }),
-        () =>
-          pipe(
-            crawlOnce(cursor),
-            Effect.tap(({ items, cursor: newCursor }) => {
-              count += items.length
-              cursor = newCursor
-              lastTimestamp = items.at(items.length - 1)?.alignTimestamp ?? 0
-              return Effect.succeed(null)
+export const crawlBsky = (sourceId: string) =>
+  pipe(
+    Effect.gen(function* (_) {
+      const { agent, account, maxCount } = yield* _(BskyCrawlContext)
+      const { endTimestamp } = yield* _(CrawlConfigContext)
+      yield* _(
+        Effect.tryCatchPromise(
+          () =>
+            agent.login({
+              identifier: account.identifier,
+              password: account.password,
             }),
-            Effect.map(({ items }) => items),
+          (e) =>
+            new BskyCrawlError(
+              'failed to login',
+              e instanceof Error ? e : null,
+            ),
+        ),
+        Effect.tap(({ data }) =>
+          Effect.logInfo(
+            `Successfully logged in, account handle: ${data.handle}`,
           ),
-      ),
-    )
+        ),
+      )
 
-    yield* _(Effect.logInfo(`Crawled ${parts.length} parts`))
+      let cursor: string | undefined = undefined
+      let count = 0
+      let lastTimestamp: number = Date.now()
 
-    return parts.flat().filter((item) => item.alignTimestamp > endTimestamp)
-  }),
-  Effect.annotateLogs('job', 'crawlBsky'),
-)
+      const parts = yield* _(
+        Effect.loop(
+          { count, lastTimestamp },
+          ({ count, lastTimestamp }) => {
+            return count < maxCount && lastTimestamp > endTimestamp
+          },
+          () => ({ count, lastTimestamp }),
+          () =>
+            pipe(
+              crawlOnce(sourceId, cursor),
+              Effect.tap(({ items, cursor: newCursor }) => {
+                count += items.length
+                cursor = newCursor
+                lastTimestamp = items.at(items.length - 1)?.alignTimestamp ?? 0
+                return Effect.succeed(null)
+              }),
+              Effect.map(({ items }) => items),
+            ),
+        ),
+      )
 
-const crawlOnce = (cursor: string | undefined) =>
+      yield* _(Effect.logInfo(`Crawled ${parts.length} parts`))
+
+      return parts.flat().filter((item) => item.alignTimestamp > endTimestamp)
+    }),
+    Effect.annotateLogs('job', 'crawlBsky'),
+  )
+
+const crawlOnce = (sourceId: string, cursor: string | undefined) =>
   Effect.gen(function* (_) {
     const { data } = yield* _(
       getTimeline({
@@ -112,6 +116,7 @@ const crawlOnce = (cursor: string | undefined) =>
       }
 
       items.push({
+        sourceId,
         type: 'BskyCrawlItem',
         alignTimestamp: Date.parse(
           // Can safely cast to string because we've checked the type

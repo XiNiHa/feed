@@ -41,24 +41,24 @@ export default {
 
     ctx.waitUntil(
       pipe(
-        crawl,
-        Effect.provideService(
-          CrawlContext,
-          CrawlContext.of({
-            FEED_BUCKET: new EffectfulBucket(env.FEED_BUCKET),
-            kvClient: makeKVClient(env.KV_DO),
-            jobTimestamp: event.scheduledTime,
-          }),
-        ),
-        Effect.provideService(
-          BskyCrawlContext,
-          BskyCrawlContext.of({
+        crawl({
+          id: 'bsky',
+          type: 'bsky',
+          context: BskyCrawlContext.context({
             agent: new BskyAgent({ service: 'https://bsky.social' }),
             maxCount: 100,
             account: {
               identifier: env.BSKY_IDENTIFIER,
               password: env.BSKY_PASSWORD,
             },
+          }),
+        }),
+        Effect.provideService(
+          CrawlContext,
+          CrawlContext.of({
+            FEED_BUCKET: new EffectfulBucket(env.FEED_BUCKET),
+            kvClient: makeKVClient(env.KV_DO),
+            jobTimestamp: event.scheduledTime,
           }),
         ),
         Effect.provideLayer(

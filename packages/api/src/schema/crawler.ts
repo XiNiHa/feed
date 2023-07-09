@@ -8,10 +8,20 @@ import { makeKVClient } from '@/do/KV'
 import { builder } from '@/schema/builder'
 import { InternalError } from '@/schema/error'
 
+const CrawlPerSourceItemsCount = builder.simpleObject(
+  'CrawlPerSourceItemsCount',
+  {
+    fields: (t) => ({
+      id: t.string(),
+      count: t.int(),
+    }),
+  },
+)
+
 const CrawlItemsCount = builder.simpleObject('CrawlItemsCount', {
   fields: (t) => ({
     all: t.int(),
-    bsky: t.int(),
+    perSources: t.field({ type: [CrawlPerSourceItemsCount] }),
   }),
 })
 
@@ -31,24 +41,24 @@ builder.mutationField('crawl', (t) =>
     },
     resolve: (_, __, ctx) =>
       pipe(
-        crawl,
-        Effect.provideService(
-          CrawlContext,
-          CrawlContext.of({
-            FEED_BUCKET: ctx.FEED_BUCKET,
-            kvClient: makeKVClient(ctx.env.KV_DO),
-            jobTimestamp: Date.now(),
-          }),
-        ),
-        Effect.provideService(
-          BskyCrawlContext,
-          BskyCrawlContext.of({
+        crawl({
+          id: 'bsky',
+          type: 'bsky',
+          context: BskyCrawlContext.context({
             agent: new BskyAgent({ service: 'https://bsky.social' }),
             account: {
               identifier: ctx.env.BSKY_IDENTIFIER,
               password: ctx.env.BSKY_PASSWORD,
             },
             maxCount: 100,
+          }),
+        }),
+        Effect.provideService(
+          CrawlContext,
+          CrawlContext.of({
+            FEED_BUCKET: ctx.FEED_BUCKET,
+            kvClient: makeKVClient(ctx.env.KV_DO),
+            jobTimestamp: Date.now(),
           }),
         ),
         Effect.catchTags({
