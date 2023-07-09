@@ -3,7 +3,7 @@ compatibility_date = "2023-06-28"
 main = "./src/index.ts"
 
 [triggers]
-crons = ["*/5 * * * *"]
+crons = ["*/15 * * * *"]
 
 [[r2_buckets]]
 binding = "FEED_BUCKET"
