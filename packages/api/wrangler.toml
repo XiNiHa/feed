@@ -5,6 +5,9 @@ main = "./src/index.ts"
 [triggers]
 crons = ["*/15 * * * *"]
 
+[durable_objects]
+bindings = [{ name = "KV_DO", class_name = "KV" }]
+
 [[r2_buckets]]
 binding = "FEED_BUCKET"
 bucket_name = "feed"
@@ -14,3 +17,7 @@ preview_bucket_name = "feed-preview"
 binding = "LOG_BUCKET"
 bucket_name = "feed-log"
 preview_bucket_name = "feed-log-preview"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["KV"]

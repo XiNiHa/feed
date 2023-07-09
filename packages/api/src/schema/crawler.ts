@@ -4,6 +4,7 @@ import * as Effect from '@effect/io/Effect'
 
 import { CrawlContext, crawl } from '@/crawler'
 import { BskyCrawlContext } from '@/crawler/bsky'
+import { makeKVClient } from '@/do/KV'
 import { builder } from '@/schema/builder'
 import { InternalError } from '@/schema/error'
 
@@ -17,6 +18,7 @@ const CrawlItemsCount = builder.simpleObject('CrawlItemsCount', {
 const CrawlPayload = builder.simpleObject('CrawlPayload', {
   fields: (t) => ({
     uploadedChunks: t.int(),
+    frontTimestamp: t.float(),
     itemsCount: t.field({ type: CrawlItemsCount }),
   }),
 })
@@ -34,6 +36,7 @@ builder.mutationField('crawl', (t) =>
           CrawlContext,
           CrawlContext.of({
             FEED_BUCKET: ctx.FEED_BUCKET,
+            kvClient: makeKVClient(ctx.env.KV_DO),
             jobTimestamp: Date.now(),
           }),
         ),

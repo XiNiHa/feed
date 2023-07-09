@@ -8,12 +8,16 @@ import { R2LogStore, R2LogStoreContext } from '@/R2LogStore'
 import { EffectfulBucket } from '@/bucket'
 import { CrawlContext, crawl } from '@/crawler'
 import { BskyCrawlContext } from '@/crawler/bsky'
+import { makeKVClient } from '@/do/KV'
 import { schema } from '@/schema'
 import type { PothosContext } from '@/schema/builder'
+
+export { KV } from '@/do/KV'
 
 export interface Env {
   FEED_BUCKET: R2Bucket
   LOG_BUCKET: R2Bucket
+  KV_DO: DurableObjectNamespace
   BSKY_IDENTIFIER: string
   BSKY_PASSWORD: string
 }
@@ -42,6 +46,7 @@ export default {
           CrawlContext,
           CrawlContext.of({
             FEED_BUCKET: new EffectfulBucket(env.FEED_BUCKET),
+            kvClient: makeKVClient(env.KV_DO),
             jobTimestamp: event.scheduledTime,
           }),
         ),
