@@ -6,7 +6,7 @@ import { crawlBsky } from '@/crawler/bsky'
 
 interface CrawlContext {
   FEED_BUCKET: EffectfulBucket
-  cronTimestamp: number
+  jobTimestamp: number
 }
 
 export const CrawlContext = Context.Tag<CrawlContext>()
@@ -23,7 +23,7 @@ interface CrawlConfigContext {
 export const CrawlConfigContext = Context.Tag<CrawlConfigContext>()
 
 export const crawl = Effect.gen(function* (_) {
-  const { FEED_BUCKET, cronTimestamp } = yield* _(CrawlContext)
+  const { FEED_BUCKET, jobTimestamp } = yield* _(CrawlContext)
 
   const list = yield* _(
     FEED_BUCKET.list({
@@ -55,9 +55,10 @@ export const crawl = Effect.gen(function* (_) {
 
   const items: CrawlItem[] = [...bskyItems]
   items.sort((a, b) => b.alignTimestamp - a.alignTimestamp)
+  const itemsCount = items.length
 
   yield* _(
-    Effect.logInfo(`Crawled ${items.length} items (bsky: ${bskyItems.length})`),
+    Effect.logInfo(`Crawled ${itemsCount} items (bsky: ${bskyItems.length})`),
   )
 
   const chunks: CrawlItem[][] = []
@@ -69,7 +70,7 @@ export const crawl = Effect.gen(function* (_) {
     Effect.forEach([...chunks].reverse(), (chunk) =>
       FEED_BUCKET.put(
         `feed-items-${new Date(
-          cronTimestamp,
+          jobTimestamp,
         ).toISOString()}-chunk${chunks.indexOf(chunk)}.json`,
         JSON.stringify(chunk),
         {
@@ -85,4 +86,12 @@ export const crawl = Effect.gen(function* (_) {
   yield* _(
     Effect.logInfo(`Crawling finished, uploaded ${chunks.length} chunks`),
   )
+
+  return {
+    uploadedChunks: chunks.length,
+    itemsCount: {
+      all: itemsCount,
+      bsky: bskyItems.length,
+    },
+  }
 })

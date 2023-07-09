@@ -23,3 +23,16 @@ builder.objectType(ZodError, {
     }),
   }),
 })
+
+export class InternalError extends Error {
+  readonly _tag = 'InternalError'
+
+  constructor(message: string) {
+    super(message)
+  }
+}
+
+builder.objectType(InternalError, {
+  interfaces: [ErrorInterface],
+  name: 'InternalError',
+})

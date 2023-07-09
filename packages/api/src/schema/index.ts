@@ -5,6 +5,7 @@ import { ZodError } from 'zod'
 
 import { builder } from './builder'
 import './error'
+import './crawler'
 
 builder.queryField('hello', (t) =>
   t.effect({

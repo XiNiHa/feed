@@ -28,6 +28,7 @@ export default {
   ): Promise<Response> {
     return yoga.handleRequest(request, {
       ...ctx,
+      env,
       FEED_BUCKET: new EffectfulBucket(env.FEED_BUCKET),
     })
   },
@@ -41,7 +42,7 @@ export default {
           CrawlContext,
           CrawlContext.of({
             FEED_BUCKET: new EffectfulBucket(env.FEED_BUCKET),
-            cronTimestamp: event.scheduledTime,
+            jobTimestamp: event.scheduledTime,
           }),
         ),
         Effect.provideService(
