@@ -655,6 +655,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@trpc/client@npm:^10.34.0":
+  version: 10.34.0
+  resolution: "@trpc/client@npm:10.34.0"
+  peerDependencies:
+    "@trpc/server": 10.34.0
+  checksum: 7589d575d92865091da72bf0eb7efbfc474422aecc2d4ac146be334bbe83a2a67eb185654dccb91b90e23207bfada2b9f4e4ebcc25a24c2a7e033c177f13e10c
+  languageName: node
+  linkType: hard
+
+"@trpc/server@npm:^10.34.0":
+  version: 10.34.0
+  resolution: "@trpc/server@npm:10.34.0"
+  checksum: 6d319c98f8a152539cd46769884ddea01bf00daaf1780067b1a1e34b45a107ab702b72e0086fa8924be44d9211b51c8f4e53ab6e85583fa53fa5893df5847c62
+  languageName: node
+  linkType: hard
+
 "@types/eslint@npm:^8.44.0":
   version: 8.44.0
   resolution: "@types/eslint@npm:8.44.0"
@@ -2100,6 +2116,8 @@ __metadata:
     "@pothos/plugin-simple-objects": ^3.7.0
     "@pothos/plugin-validation": ^3.9.2
     "@pothos/plugin-with-input": ^3.10.1
+    "@trpc/client": ^10.34.0
+    "@trpc/server": ^10.34.0
     graphql: ^16.7.1
     graphql-yoga: ^4.0.3
     pothos-plugin-effect: ^0.3.0

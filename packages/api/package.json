@@ -18,6 +18,8 @@
     "@pothos/plugin-simple-objects": "^3.7.0",
     "@pothos/plugin-validation": "^3.9.2",
     "@pothos/plugin-with-input": "^3.10.1",
+    "@trpc/client": "^10.34.0",
+    "@trpc/server": "^10.34.0",
     "graphql": "^16.7.1",
     "graphql-yoga": "^4.0.3",
     "pothos-plugin-effect": "^0.3.0",
