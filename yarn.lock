@@ -655,6 +655,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@total-typescript/ts-reset@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "@total-typescript/ts-reset@npm:0.4.2"
+  checksum: e3681b8fb48cf63538c19e7f203de5ec8b1abdcd0db5c6bd48e0881e2a86977771118c6c2930691947d11213b10a654bc2328b479c4dc0ddec7dfde129d08569
+  languageName: node
+  linkType: hard
+
 "@trpc/client@npm:^10.34.0":
   version: 10.34.0
   resolution: "@trpc/client@npm:10.34.0"
@@ -2116,11 +2123,13 @@ __metadata:
     "@pothos/plugin-simple-objects": ^3.7.0
     "@pothos/plugin-validation": ^3.9.2
     "@pothos/plugin-with-input": ^3.10.1
+    "@total-typescript/ts-reset": ^0.4.2
     "@trpc/client": ^10.34.0
     "@trpc/server": ^10.34.0
     graphql: ^16.7.1
     graphql-yoga: ^4.0.3
     pothos-plugin-effect: ^0.3.0
+    ts-pattern: ^5.0.1
     wrangler: ^3.1.2
     zod: ^3.21.4
   languageName: unknown
@@ -4399,6 +4408,13 @@ __metadata:
   dependencies:
     is-number: ^7.0.0
   checksum: f76fa01b3d5be85db6a2a143e24df9f60dd047d151062d0ba3df62953f2f697b16fe5dad9b0ac6191c7efc7b1d9dcaa4b768174b7b29da89d4428e64bc0a20ed
+  languageName: node
+  linkType: hard
+
+"ts-pattern@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "ts-pattern@npm:5.0.1"
+  checksum: 9d243bf63f6673ee7dfc75401bcb9f462130a92f753b4a9f491c47f369f1b95d7e9699daea93ce661c8b74fe25141e5518e65f21941d067158764f0213620305
   languageName: node
   linkType: hard
 
