@@ -38,6 +38,7 @@ builder.mutationField('crawl', (t) =>
     type: CrawlPayload,
     errors: {
       types: [InternalError],
+      directResult: true,
     },
     resolve: (_, __, ctx) =>
       pipe(
